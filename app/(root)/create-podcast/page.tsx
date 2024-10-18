@@ -17,27 +17,33 @@ import { Id } from '@/convex/_generated/dataModel'
 
 
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
-    }),
+    podcastTitle: z.string().min(2),
+    podcastDescription: z.string().min(2)
 })
 
 const VoiceCategories = ['alloy', 'shimmer', 'nova', 'echo', 'fable', 'onyx']
 
 const CreatePodcast = () => {
 
-    const [voiceType, setVoiceType] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [audioUrl, setAudioUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
 
     const [imagePrompt, setImagePrompt] = useState('');
     const [audioStorageId, setAudioStorageId] = useState<Id<"_storage"> | null>(null);
+    const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(null);
+    const [audioDuration, setAudioDuration] = useState(0)
 
+    const [voiceType, setVoiceType] = useState<string | null>(null)
+    const [voicePrompt, setVoicePrompt] = useState("")
 
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            podcastTitle: "",
+            podcastDescription: "",
         },
     })
 
@@ -62,7 +68,7 @@ const CreatePodcast = () => {
                                 <FormItem className='flex flex-col gap-2.5'>
                                     <FormLabel className='text-white-1'>Podcast title</FormLabel>
                                     <FormControl>
-                                        <Input className='input-class focus-visible:ring-orange-1' placeholder="JSM Pro Podcast" {...field} />
+                                        <Input className='input-class focus-visible:ring-offset-orange-1' placeholder="Pro Podcast" {...field} />
                                     </FormControl>
                                     {/* <FormDescription>
                                         This is your public display name.
@@ -78,7 +84,7 @@ const CreatePodcast = () => {
                             <Select onValueChange={(value) =>
                                 setVoiceType(value)
                             }>
-                                <SelectTrigger className={cn('text-16 w-full border-none bg-black-1 text-gray-1')}>
+                                <SelectTrigger className={cn('text-16 w-full border-none bg-black-1 text-gray-1 focus-visible:ring-offset-orange-1')}>
                                     <SelectValue placeholder="Select Ai Voice" className='placeholder:text-gray-1' />
                                 </SelectTrigger>
                                 <SelectContent
@@ -114,7 +120,7 @@ const CreatePodcast = () => {
                                     <FormLabel className='text-white-1'>Description</FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            className='input-class focus-visible:ring-orange-1'
+                                            className='input-class focus-visible:ring-offset-orange-1'
                                             placeholder="Write a short podcast description" {...field} />
                                     </FormControl>
                                     <FormMessage />
@@ -123,7 +129,15 @@ const CreatePodcast = () => {
                         />
                     </div>
                     <div className='flex flex-col pt-10'>
-                        <GeneratePodcast />
+                        <GeneratePodcast
+                            audioStorageId={audioStorageId}
+                            setAudioStorageId={setAudioStorageId}
+                            voiceType={voiceType}
+                            audioUrl={audioUrl}
+                            voicePrompt={voicePrompt}
+                            setVoicePrompt={setVoicePrompt}
+                            setAudioDuration={setAudioDuration}
+                        />
                         <GenerateThumbnail />
 
                         <div className='mt-10 w-full'>
