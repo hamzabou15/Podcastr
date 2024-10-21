@@ -12,8 +12,8 @@ const LeftSidebar = () => {
     // const router = useRouter();
 
     return (
-        <section className='left_sidebar'>
-            <nav className='flex flex-col gap-6'>
+        <section className='left_sidebar relative'>
+            <nav className='flex flex-col gap-6 top-7 sticky left-0'>
                 <Link href="/" className='flex cursor-pointer items-center
                 gap-1 pb-10 max-lg:justify-center
             '>

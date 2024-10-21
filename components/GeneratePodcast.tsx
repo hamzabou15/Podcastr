@@ -10,10 +10,14 @@ import { useAction, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { v4 as uuid4 } from 'uuid'
 import { useUploadFiles } from '@xixixao/uploadstuff/react'
+import { useToast } from "@/hooks/use-toast"
 
 const useGeneratePodcast = (props: GeneratePodcastProps) => {
     //  Logic of generating
     const [isGenerating, setIsGenerating] = useState(false)
+    const { toast } = useToast()
+
+
     const generateUploadUrl = useMutation(api.files.generateUploadUrl)
     const { startUpload } = useUploadFiles(generateUploadUrl)
 
@@ -27,6 +31,9 @@ const useGeneratePodcast = (props: GeneratePodcastProps) => {
         props.setAudio('')
 
         if (!props.voicePrompt) {
+            toast({
+                title: "Please provide a voiceType to generate a podcast",
+            })
             return setIsGenerating(false)
         }
 
@@ -45,13 +52,19 @@ const useGeneratePodcast = (props: GeneratePodcastProps) => {
 
             props.setAudioStorageId(storageId)
 
-            const  audioUrl = await getAudioUrl({storageId})
+            const audioUrl = await getAudioUrl({ storageId })
             props.setAudio(audioUrl!);
             setIsGenerating(false);
-
+            toast({
+                title: "Podcast generated successfully",
+            })
 
         } catch (error) {
             console.log(error)
+            toast({
+                title: "Error creating a podcast",
+                variant:"destructive"
+            })
             setIsGenerating(false)
         }
     }
@@ -81,7 +94,8 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
             </div>
             <div className='mt-5 w-full max-w-[200px]'>
                 <Button type="submit"
-                    className='text-16 bg-orange-1
+                        onClick={generatePodcast}
+                        className='text-16 bg-orange-1
                                     py-4 font-extrabold text-white-1 *:
                                     
                                 '

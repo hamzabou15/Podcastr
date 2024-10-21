@@ -130,9 +130,9 @@ const CreatePodcast = () => {
                     </div>
                     <div className='flex flex-col pt-10'>
                         <GeneratePodcast
-                            audioStorageId={audioStorageId}
                             setAudioStorageId={setAudioStorageId}
-                            voiceType={voiceType}
+                            setAudio={setAudioUrl}
+                            voiceType={voiceType!}
                             audioUrl={audioUrl}
                             voicePrompt={voicePrompt}
                             setVoicePrompt={setVoicePrompt}
