@@ -9,10 +9,10 @@ import { Loader } from 'lucide-react'
 import { Input } from './ui/input'
 import Image from 'next/image'
 import { useToast } from '@/hooks/use-toast'
-import { useMutation } from 'convex/react'
+import { useAction, useMutation } from 'convex/react'
 import { useUploadFiles } from '@xixixao/uploadstuff/react'
 import { api } from '@/convex/_generated/api'
-
+import { v4 as uuidv4 } from 'uuid'
 const GenerateThumbnail = (
     { setImagePrompt, setImage, imagePrompt, setImageStorageId, image }
         : GenerateThumbnailProps
@@ -52,7 +52,20 @@ const GenerateThumbnail = (
             toast({ title: 'Error generating thumbnail', variant: 'destructive' })
         }
     }
+
+    const handleGenerateThumbnail = useAction(api.openai.generateThumbnailAction)
     const generateImage = async () => {
+
+        try {
+            const response = await handleGenerateThumbnail({
+                prompt: imagePrompt
+            });
+            const blob = new Blob([response], { type: 'image/png' })
+            handleImage(blob, `thumbnail-${uuidv4()}`)
+        } catch (error) {
+            console.log('Error' , error)
+            toast({title: 'Error generating thmbnail', variant:"destructive"})
+        }
 
 
     }
@@ -61,7 +74,7 @@ const GenerateThumbnail = (
         e.preventDefault();
 
 
-        console.log(image , "uploadImage")
+        // console.log(image , "uploadImage")
 
         try {
             const files = e.target.files
@@ -70,7 +83,7 @@ const GenerateThumbnail = (
             const blob = await file.arrayBuffer()
                 .then((arrayBuffer) => new Blob([arrayBuffer]));
 
-                handleImage(blob, file.name)
+            handleImage(blob, file.name)
 
         } catch (error) {
             console.log(error);
