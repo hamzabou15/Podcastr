@@ -1,4 +1,4 @@
-
+// convex/auth.config.ts
 const authConfig = {
     providers: [
         {

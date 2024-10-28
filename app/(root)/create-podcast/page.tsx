@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -14,10 +14,12 @@ import GeneratePodcast from '@/components/GeneratePodcast'
 import GenerateThumbnail from '@/components/GenerateThumbnail'
 import { Loader } from 'lucide-react'
 import { Id } from '@/convex/_generated/dataModel'
-import { toast, useToast } from '@/hooks/use-toast'
-import { useMutation } from 'convex/react'
+import { useToast } from '@/hooks/use-toast'
+import { useConvexAuth, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { useRouter } from 'next/navigation'
+// import { query } from '@/convex/_generated/server'
+// import { useUser } from '@clerk/nextjs'
 
 
 const formSchema = z.object({
@@ -55,18 +57,40 @@ const CreatePodcast = () => {
         },
     })
 
+
+    const { isLoading, isAuthenticated } = useConvexAuth();
+
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
+
         try {
-            setIsSubmitting(true)
+            setIsSubmitting(true);
+
+            if (isLoading) {
+                toast({
+                    title: "Loading authentication status...",
+                });
+                // Optionally, wait or handle loading here
+                return; // Exit early if loading
+            }
+
+            if (!isAuthenticated) {
+                toast({
+                    title: "You must be authenticated to create a podcast.",
+                });
+                setIsSubmitting(false);
+                return; // Exit early if not authenticated
+            }
+
             if (!audioUrl || !imageUrl || !voiceType) {
                 toast({
-                    title: "Please generate audio and image"
-                })
-                setIsSubmitting(false)
-                throw new Error('Please generate audio and image')
+                    title: "Please generate audio and image",
+                });
+                setIsSubmitting(false);
+                throw new Error("Please generate audio and image");
             }
-            const podcast = await createPodcast({
+
+            await createPodcast({
                 podcastTitle: values.podcastTitle,
                 podcastDescription: values.podcastDescription,
                 audioUrl,
@@ -78,21 +102,80 @@ const CreatePodcast = () => {
                 audioDuration,
                 audioStorageId: audioStorageId!,
                 imageStorageId: imageStorageId!,
-            })
+            });
+
             toast({
-                title:'Podcast created'
-            })
-            setIsSubmitting(false)
-            router.push('/')
+                title: "Podcast created",
+            });
+            setIsSubmitting(false);
+            router.push("/");
         } catch (error) {
-            console.log(error, "Error submutting form schema")
+            console.log(error, "Error submitting form schema");
             toast({
                 title: "Error",
-                variant: "destructive"
-            })
-            setIsSubmitting(false)
+                variant: "destructive",
+            });
+            setIsSubmitting(false);
         }
     }
+
+    // useEffect(() => {
+    //     query({
+    //         args: { clerkId: user.id },
+    //         handler: async (ctx, args) => {
+    //             const identity = await ctx?.auth.getUserIdentity(); // Get the current user identity
+    //             console.log('identity', identity)
+    //             if (!identity) {
+    //                 throw new ConvexError("User not authenticated");
+    //             }
+
+    //             const user = await ctx.db
+    //                 .query("users")
+    //                 .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
+    //                 .unique();
+
+    //             if (!user) {
+    //                 throw new ConvexError("User not found");
+    //             }
+
+    //             return user;
+    //         },
+    //     });
+    // }, [])
+    // useEffect(() => {
+    //     alert('bbbbbbbbbbbbbbbbbb')
+    //     query({
+    //         args: {},
+    //         handler: async (ctx) => {
+    //             const identity = await ctx.auth.getUserIdentity();
+    //             if (identity === null) {
+    //                 alert("Not authenticated");
+    //             }
+    //             else {
+    //                 alert('authenticated')
+    //             }
+    //         },
+    //     });
+    // }, [])
+
+
+    // alert("Not authenticated");
+
+
+
+    useEffect(() => {
+        console.log({ isLoading, isAuthenticated });
+
+        if (!isLoading) { // Check if loading is complete
+            if (isAuthenticated) {
+                alert('Authenticated');
+            } else {
+                alert('Not authenticated');
+            }
+        }
+    }, [isLoading, isAuthenticated]); // Add isLoading and isAuthenticated as dependencies
+
+
     return (
         <section className='text-white'>
             <h1 className='text-20 font-bold text-white-1'>Create Podcasts </h1>
@@ -208,7 +291,8 @@ const CreatePodcast = () => {
                             </Button>
                         </div>
                     </div>
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit"
+                    >Submit</Button>
                 </form>
             </Form>
         </section>
