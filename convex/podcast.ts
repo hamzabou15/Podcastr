@@ -1,6 +1,6 @@
 "use client"
 import { ConvexError, v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 
 
@@ -23,17 +23,17 @@ export const createPodcast = mutation({
         if (!identity) {
             throw new ConvexError("User not authenticated");
         }
-    
+
         // Fetch the user using the authenticated user's email
         const user = await ctx.db
             .query("users")
-            .filter((q) => q.eq(q.field("email"), identity.email)) 
+            .filter((q) => q.eq(q.field("email"), identity.email))
             .collect();
-    
+
         if (user.length === 0) {
             throw new ConvexError("User not found");
         }
-    
+
         const podcast = await ctx.db.insert('podcasts', {
             ...args,
             user: user[0]._id,
@@ -41,10 +41,31 @@ export const createPodcast = mutation({
             authorId: user[0].clerkId,
             authorImageUrl: user[0].imageUrl
         });
-    
+
         return podcast;
     }
-    
+
+})
+
+// get all podcasts
+
+export const getTrendingPodcasts = query({
+    handler: async (ctx) => {
+        const podcasts = await ctx.db.query("podcasts").collect();
+        console.log(podcasts)
+        return podcasts
+    },
+})
+
+// get one podcast
+
+export const getPodcastById = query({
+    args: {
+        podcastId: v.id('podcasts')
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db.get(args.podcastId)
+    },
 })
 
 export const getUrl = mutation({
