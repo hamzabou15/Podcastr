@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -120,60 +120,16 @@ const CreatePodcast = () => {
     }
 
     // useEffect(() => {
-    //     query({
-    //         args: { clerkId: user.id },
-    //         handler: async (ctx, args) => {
-    //             const identity = await ctx?.auth.getUserIdentity(); // Get the current user identity
-    //             console.log('identity', identity)
-    //             if (!identity) {
-    //                 throw new ConvexError("User not authenticated");
-    //             }
+    //     console.log({ isLoading, isAuthenticated });
 
-    //             const user = await ctx.db
-    //                 .query("users")
-    //                 .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
-    //                 .unique();
-
-    //             if (!user) {
-    //                 throw new ConvexError("User not found");
-    //             }
-
-    //             return user;
-    //         },
-    //     });
-    // }, [])
-    // useEffect(() => {
-    //     alert('bbbbbbbbbbbbbbbbbb')
-    //     query({
-    //         args: {},
-    //         handler: async (ctx) => {
-    //             const identity = await ctx.auth.getUserIdentity();
-    //             if (identity === null) {
-    //                 alert("Not authenticated");
-    //             }
-    //             else {
-    //                 alert('authenticated')
-    //             }
-    //         },
-    //     });
-    // }, [])
-
-
-    // alert("Not authenticated");
-
-
-
-    useEffect(() => {
-        console.log({ isLoading, isAuthenticated });
-
-        if (!isLoading) { // Check if loading is complete
-            if (isAuthenticated) {
-                alert('Authenticated');
-            } else {
-                alert('Not authenticated');
-            }
-        }
-    }, [isLoading, isAuthenticated]); // Add isLoading and isAuthenticated as dependencies
+    //     if (!isLoading) { // Check if loading is complete
+    //         if (isAuthenticated) {
+    //             alert('Authenticated');
+    //         } else {
+    //             alert('Not authenticated');
+    //         }
+    //     }
+    // }, [isLoading, isAuthenticated]); // Add isLoading and isAuthenticated as dependencies
 
 
     return (

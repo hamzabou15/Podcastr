@@ -3,8 +3,9 @@ import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 
-
+// create podcast
 export const createPodcast = mutation({
+    // on a deux parametres
     args: {
         audioStorageId: v.id("_storage"),
         podcastTitle: v.string(),
@@ -48,7 +49,6 @@ export const createPodcast = mutation({
 })
 
 // get all podcasts
-
 export const getTrendingPodcasts = query({
     handler: async (ctx) => {
         const podcasts = await ctx.db.query("podcasts").collect();
@@ -57,8 +57,8 @@ export const getTrendingPodcasts = query({
     },
 })
 
-// get one podcast
 
+// get one podcast
 export const getPodcastById = query({
     args: {
         podcastId: v.id('podcasts')
@@ -68,6 +68,8 @@ export const getPodcastById = query({
     },
 })
 
+
+// get url generator
 export const getUrl = mutation({
     args: {
         storageId: v.id('_storage'),
