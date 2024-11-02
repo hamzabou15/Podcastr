@@ -15,7 +15,7 @@ const LeftSidebar = () => {
         <section className='left_sidebar '>
             <nav className='flex flex-col gap-6 '>
                 <Link href="/" className='flex cursor-pointer items-center
-                gap-1 pb-10 max-lg:justify-center
+                gap-2 pb-10 max-lg:justify-center
             '>
                     <Image
                         alt='logo'
@@ -34,7 +34,7 @@ const LeftSidebar = () => {
 
                     return <Link
                         className=
-                        {cn('flex gap-3 py-4 items-center max-lg:px-4 justify-center lg:justify-start', {
+                        {cn('flex gap-3 py-4 items-center max-lg:px-4  lg:justify-start', {
 
                             'bg-nav-focus border-r-4 border-orange-1 ':isActive
                         })}

@@ -147,11 +147,8 @@ const CreatePodcast = () => {
                                 <FormItem className='flex flex-col gap-2.5'>
                                     <FormLabel className='text-white-1'>Podcast title</FormLabel>
                                     <FormControl>
-                                        <Input className='input-class focus-visible:ring-offset-orange-1' placeholder="Pro Podcast" {...field} />
+                                        <Input className='input-class  focus-visible:ring-offset-orange-1' placeholder="Pro Podcast" {...field} />
                                     </FormControl>
-                                    {/* <FormDescription>
-                                        This is your public display name.
-                                    </FormDescription> */}
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -163,8 +160,8 @@ const CreatePodcast = () => {
                             <Select onValueChange={(value) =>
                                 setVoiceType(value)
                             }>
-                                <SelectTrigger className={cn('text-16 w-full border-none bg-black-1 text-gray-1 focus-visible:ring-offset-orange-1')}>
-                                    <SelectValue placeholder="Select Ai Voice" className='placeholder:text-gray-1' />
+                                <SelectTrigger className={cn('text-16 w-full border-none bg-black-1 input-class focus-visible:ring-offset-orange-1')}>
+                                    <SelectValue placeholder="Select Ai Voice" className='placeholder:text-gray-1 ' />
                                 </SelectTrigger>
                                 <SelectContent
                                     className='text-16 border-none bg-black-1 

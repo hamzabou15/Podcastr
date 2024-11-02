@@ -1,4 +1,5 @@
 "use client";
+import LoaderSpinner from '@/components/LoaderSpinner';
 import PodcastCard from '@/components/PodcastCard'
 // import { podcastData } from '@/constants'
 import { api } from '@/convex/_generated/api';
@@ -11,7 +12,11 @@ import React from 'react'
 const Home = () => {
   const podcasts = useQuery(api.podcast.getTrendingPodcasts);
 
-  console.log("podcasts" , podcasts)
+  if (!podcasts) {
+
+    return <LoaderSpinner />
+  }
+
 
   return (
     <div className='mt-9 flex flex-col gap-9'>

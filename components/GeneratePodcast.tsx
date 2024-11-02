@@ -5,12 +5,13 @@ import { Label } from './ui/label'
 import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
 import { Loader } from 'lucide-react'
-import { GenerateAudioAction } from '@/convex/openai'
+// import { GenerateAudioAction } from '@/convex/openai'
 import { useAction, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { v4 as uuid4 } from 'uuid'
 import { useUploadFiles } from '@xixixao/uploadstuff/react'
 import { useToast } from "@/hooks/use-toast"
+
 
 const useGeneratePodcast = (props: GeneratePodcastProps) => {
     //  Logic of generating
@@ -48,7 +49,7 @@ const useGeneratePodcast = (props: GeneratePodcastProps) => {
             const fileName = `podcast${uuid4()}.mp3`
             const file = new File([blob], fileName, { type: 'audio/mpeg' });
             const uploaded = await startUpload([file]);
-            const storageId = (uploaded[0].response as any).storageId;
+            const storageId = (uploaded[0]?.response as any)?.storageId;
 
             props.setAudioStorageId(storageId)
 
@@ -84,7 +85,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
                 <Label className='text-16 font-bold text-white-1'>
                     Ai Prompt generate Podcast
                 </Label>
-                <Textarea className='input-class font-light  focus-visible:ring-orange-1  '
+                <Textarea className='input-class font-light text-white-1  focus-visible:ring-orange-1  '
                     placeholder='Provide text to generate audio'
                     rows={5}
                     value={props.voicePrompt}
