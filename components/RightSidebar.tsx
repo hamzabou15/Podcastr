@@ -7,11 +7,17 @@ import Carousel from './Carousel';
 import Header from './Header';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { useRouter } from 'next/navigation';
+// import LoaderSpinner from './LoaderSpinner';
 
 const RightSidebar = () => {
 
     const { user } = useUser();
-    const topPodcasters = useQuery(api.users.getTopUserByPodcastCount)
+    const topPodcasters = useQuery(api.users.getTopUserByPodcastCount);
+    const router = useRouter();
+
+    // if(!topPodcasters) return <LoaderSpinner />
+
     return (
         <section
             className='right_sidebar text-white-1'
@@ -39,7 +45,26 @@ const RightSidebar = () => {
             <section className='flex flex-col gap-8 pt-12'>
                 <Header headerTitle='Top Podcasters' />
                 <div className='flex flex-col gap-5'>
-
+                    {topPodcasters?.slice(0, 4).map((pod) => (
+                        <div className='flex cursor-pointer justify-between items-center'  key={pod._id}
+                            onClick={() => router.push(`/profile/${pod.clerkId}`)}
+                        >   
+                            <figure className='flex items-center gap-2 '>
+                                <Image 
+                                    src={pod.imageUrl}
+                                    height={44}
+                                    width={44}
+                                    alt={pod.name}
+                                    className='aspect-square rounded-lg'
+                                />
+                                <h2 className='text-white-1 text-14 font-semibold'>{pod.name}</h2>
+                            </figure>
+                            <div className='flex items-center '>
+                                <p className='text-12 font-normal'>{pod.totalPodcasts} podcasts</p>
+                            </div>
+                        </div>
+                    ))
+                    }
                 </div>
             </section>
         </section>
