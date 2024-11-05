@@ -101,6 +101,52 @@ export const getPodcastByVoiceType = query({
     },
   });
 
+
+   // this query will get the podcast by the search query.
+   export const getPodcastBySearch = query({
+    args: {
+      search: v.string(),
+    },
+    handler: async (ctx, args) => {
+      if (args.search === "") {
+        return await ctx.db.query("podcasts").order("desc").collect();
+      }
+  
+      const searchQuery = args.search.toLowerCase();
+  
+      // Log the search query for debugging
+      console.log("Search Query:", searchQuery);
+  
+      // Recherche dans le titre
+      const titleSearch = await ctx.db
+        .query("podcasts")
+        .withSearchIndex("search_title", (q) => q.search("podcastTitle", searchQuery))
+        .take(10);
+  
+      console.log("Title Search Results:", titleSearch);
+  
+      // Recherche dans la description
+      const descriptionSearch = await ctx.db
+        .query("podcasts")
+        .withSearchIndex("search_body", (q) => q.search("podcastDescription", searchQuery))
+        .take(10);
+  
+      console.log("Description Search Results:", descriptionSearch);
+  
+      // Combinaison des résultats tout en évitant les doublons
+      const combinedResults = [...titleSearch, ...descriptionSearch];
+      const uniqueResults = Array.from(new Map(combinedResults.map(p => [p._id, p])).values());
+  
+      return uniqueResults.slice(0, 10);
+    },
+  });
+  
+  
+  
+  
+  
+  
+
   // this mutation will delete the podcast.
 export const deletePodcast = mutation({
     args: {
@@ -120,4 +166,5 @@ export const deletePodcast = mutation({
       return await ctx.db.delete(args.podcastId);
     },
   });
-  
+
+ 
