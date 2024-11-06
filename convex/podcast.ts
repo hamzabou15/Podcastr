@@ -100,8 +100,6 @@ export const getPodcastByVoiceType = query({
         .collect();
     },
   });
-
-
    // this query will get the podcast by the search query.
    export const getPodcastBySearch = query({
     args: {
@@ -141,13 +139,6 @@ export const getPodcastByVoiceType = query({
     },
   });
   
-  
-  
-  
-  
-  
-
-  // this mutation will delete the podcast.
 export const deletePodcast = mutation({
     args: {
       podcastId: v.id("podcasts"),
