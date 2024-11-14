@@ -99,7 +99,6 @@ export const getPodcastByVoiceType = query({
             q.neq(q.field("_id"), args.podcastId)
           )
         )
-        // and after that collet() results //
         .collect();
     },
   });
