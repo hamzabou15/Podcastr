@@ -5,7 +5,6 @@ import PodcastCard from '@/components/PodcastCard'
 import Searchbar from '@/components/Searchbar'
 import { api } from '@/convex/_generated/api'
 import { useQuery } from 'convex/react'
-import { usePathname } from 'next/navigation'
 import React from 'react'
 
 const Discover = ({ searchParams: { search} }: { searchParams : { search: string }}) => {

@@ -24,7 +24,7 @@ const PodcastCard = ({ podcastId, description, imgUrl, title }:
                     height={174}
                     alt={title}
                     unoptimized
-                    className='aspect-square h-fit w-full rounded-xl 2xl:size-[200px]'
+                    className='aspect-square h-fit w-full rounded-xl 2xl:object-cover'
                 >
 
                 </Image>
