@@ -28,7 +28,7 @@ export default function RootLayout({
               </Image>
               <MobileNav />
             </div>
-            <div className="flex flex-col md:pb-14">
+            <div className="flex flex-col md:pb-14 mb-5">
               <Toaster />
               {children}
             </div>

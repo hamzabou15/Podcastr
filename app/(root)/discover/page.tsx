@@ -7,18 +7,19 @@ import { api } from '@/convex/_generated/api'
 import { useQuery } from 'convex/react'
 import React from 'react'
 
-const Discover = ({ searchParams: { search} }: { searchParams : { search: string }}) => {
+const Discover = ({ searchParams: { search } }: { searchParams: { search: string } }) => {
 
 
     const podcastData = useQuery(api.podcast.getPodcastBySearch, { search: search || '' })
 
-    console.log("podcastData" , podcastData)
 
     return (
         <div className='flex flex-col gap-9'>
             <Searchbar />
             <div className='flex flex-col gap-9'>
-                <h1 className='text-20 font-bold text-white-1'>Discover</h1>
+                <h1 className='text-20 font-bold text-white-1'>
+                    {!search ? 'Discover Trending Podcasts' : `Search results for  "${search}"`}
+                </h1>
                 {podcastData ?
                     <>
                         {podcastData.length > 0 ? (
