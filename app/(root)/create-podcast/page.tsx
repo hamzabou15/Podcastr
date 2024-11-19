@@ -244,8 +244,6 @@ const CreatePodcast = () => {
                             </Button>
                         </div>
                     </div>
-                    <Button type="submit"
-                    >Submit</Button>
                 </form>
             </Form>
         </section>

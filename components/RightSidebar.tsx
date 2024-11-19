@@ -16,8 +16,6 @@ const RightSidebar = () => {
     const topPodcasters = useQuery(api.users.getTopUserByPodcastCount);
     const router = useRouter();
 
-    // if(!topPodcasters) return <LoaderSpinner />
-
     return (
         <section
             className='right_sidebar text-white-1'

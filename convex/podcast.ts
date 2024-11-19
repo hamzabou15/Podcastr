@@ -164,3 +164,23 @@ export const deletePodcast = mutation({
   },
 });
 
+
+// this query will get the podcast by the authorId.
+export const getPodcastByAuthorId = query({
+  args: {
+    profileID: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const podcasts = await ctx.db
+      .query("podcasts")
+      .filter((q) => q.eq(q.field("authorId"), args.profileID))
+      .collect();
+
+    const totalListeners = podcasts.reduce(
+      (sum, podcast) => sum + podcast.views,
+      0
+    );
+
+    return { podcasts, listeners: totalListeners };
+  },
+});
