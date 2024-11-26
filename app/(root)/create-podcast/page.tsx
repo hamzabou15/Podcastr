@@ -18,8 +18,6 @@ import { useToast } from '@/hooks/use-toast'
 import { useConvexAuth, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { useRouter } from 'next/navigation'
-// import { query } from '@/convex/_generated/server'
-// import { useUser } from '@clerk/nextjs'
 
 
 const formSchema = z.object({
@@ -83,9 +81,9 @@ const CreatePodcast = () => {
             }
 
             if (!audioUrl || !imageUrl || !voiceType) {
-                toast({
-                    title: "Please generate audio and image",
-                });
+                // toast({
+                //     title: "Please generate audio and image",
+                // });
                 setIsSubmitting(false);
                 throw new Error("Please generate audio and image");
             }
@@ -111,10 +109,10 @@ const CreatePodcast = () => {
             router.push("/");
         } catch (error) {
             console.log(error, "Error submitting form schema");
-            toast({
-                title: "Error",
-                variant: "destructive",
-            });
+            // toast({
+            //     title: "Error",
+            //     variant: "destructive",
+            // });
             setIsSubmitting(false);
         }
     }
@@ -143,14 +141,17 @@ const CreatePodcast = () => {
                         <FormField
                             control={form.control}
                             name="podcastTitle"
-                            render={({ field }) => (
+                            render={({ field, fieldState: { error } }) => (
                                 <FormItem className='flex flex-col gap-2.5'>
                                     <FormLabel className='text-white-1'>Podcast title</FormLabel>
                                     <FormControl>
                                         <Input className='input-class  focus-visible:ring-offset-orange-1' placeholder="Pro Podcast" {...field} />
                                     </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                                    {error && (
+                                        <FormMessage className="text-red-600">
+                                            Une erreur est survenue
+                                        </FormMessage>
+                                    )}                                </FormItem>
                             )}
                         />
                         <div className='flex flex-col gap-2.5'>
@@ -184,7 +185,6 @@ const CreatePodcast = () => {
                                         className='hidden'
                                     />
                                 )
-
                                 }
                             </Select>
                         </div>
